@@ -1,0 +1,28 @@
+trigger:
+- main   # Runs when code is pushed to the main branch
+
+pool:
+  vmImage: 'ubuntu-latest'  # Azure Pipelines agent
+
+variables:
+  SOURCE_FILE: 'source-folder/sample.txt'  # Change to your source file path
+  DEST_FOLDER: 'destination-folder'
+
+steps:
+- checkout: self
+
+# Step 1: Create destination folder if it doesn't exist
+- script: |
+    mkdir -p $(DEST_FOLDER)
+  displayName: 'Create destination folder'
+
+# Step 2: Copy file from source to destination
+- script: |
+    cp $(SOURCE_FILE) $(DEST_FOLDER)/
+    echo "✅ File copied from $(SOURCE_FILE) to $(DEST_FOLDER)"
+  displayName: 'Copy file'
+
+# Step 3: List files in destination folder (verification)
+- script: |
+    ls -l $(DEST_FOLDER)
+  displayName: 'List destination folder contents'
